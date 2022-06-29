@@ -141,9 +141,9 @@ class Csv_Writer
         }
         $rows = array();
         foreach ($this->data as $row) {
-            $rows[] = implode($this->formatRow($row), $this->dialect->delimiter);
+            $rows[] = implode($this->dialect->delimiter, $this->formatRow($row));
         }
-        $output = implode($rows, $this->dialect->lineterminator) . $this->dialect->lineterminator; // ensures that there is a line terminator at the end of the file, which is necessary
+        $output = implode($this->dialect->lineterminator, $rows) . $this->dialect->lineterminator; // ensures that there is a line terminator at the end of the file, which is necessary
         fwrite($this->handle, $output);
         $this->data = array(); // data has been written, so empty it
     }
@@ -225,14 +225,5 @@ class Csv_Writer
         foreach ($special_chars as $char) {
             if (strpos($input, $char) !== false) return true;
         }
-    }
-
-    /**
-     * This is most likely redundant, but eh, it can't hurt anything.
-     * @access public
-     */
-    public function __destruct()
-    {
-        if (is_resource($this->handle)) fclose($this->handle);
     }
 }
